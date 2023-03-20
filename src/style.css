@@ -1,0 +1,70 @@
+* {
+  margin: 0%;
+  padding: 0%;
+  scroll-behavior: smooth;
+  /* scrollbar-color: black transparent; */
+}
+
+/* ::-webkit-scrollbar-thumb {
+  background-color: black; */
+/* } */
+
+body {
+  font-family: "Source Han Sans CN", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* font */
+/* Source Han Sans CN */
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-ExtraLight.otf");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-Light.otf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"),
+    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Normal.otf"),
+    url("/font/SourceHanSansCN-Normal.otf");
+  font-weight: 400;
+}
+
+/* @font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"),
+    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Regular.otf"),
+    url("/font/SourceHanSansCN-Regular.otf");
+  font-weight: 400;
+} */
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"),
+    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Medium.otf"),
+    url("/font/SourceHanSansCN-Medium.otf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"),
+    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Bold.otf"),
+    url("/font/SourceHanSansCN-Bold.otf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  src: local("Source Han Sans CN"),
+    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Heavy.otf"),
+    url("/font/SourceHanSansCN-Heavy.otf");
+  font-weight: 900;
+}

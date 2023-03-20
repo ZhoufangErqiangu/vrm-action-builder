@@ -1,0 +1,68 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "standard-with-typescript",
+        "plugin:vue/vue3-recommended"
+    ],
+    "overrides": [],
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "modules": true
+        },
+        "project": "./tsconfig.json",
+        "extraFileExtensions": [
+            ".vue"
+        ]
+    },
+    "plugins": [
+        "vue"
+    ],
+    "rules": {
+        // 0 off 1 warn 2 error
+        "semi": [
+            2,
+            "always"
+        ],
+        "@typescript-eslint/semi": [
+            2,
+            "always"
+        ],
+        "quotes": [
+            2,
+            "double"
+        ],
+        "@typescript-eslint/quotes": [
+            2,
+            "double"
+        ],
+        "comma-dangle": [
+            2,
+            "only-multiline"
+        ],
+        "space-before-function-paren": 0,
+        "@typescript-eslint/space-before-function-paren": 0,
+        "no-console": 0,
+        "no-debugger": 0,
+        "vue/script-setup-uses-vars": "error", // setup 语法糖校验
+        // "no-unused-vars": 0,
+        // "@typescript-eslint/no-unused-vars": 0,
+        "vue/no-deprecated-slot-attribute": 0,
+        "vue/max-attributes-per-line": 0,
+        "vue/first-attribute-linebreak": 0,
+        "vue/html-indent": 0,
+        "vue/html-closing-bracket-newline": 0,
+        "@typescript-eslint/strict-boolean-expressions": 0,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/member-delimiter-style": 0,
+        "@typescript-eslint/comma-dangle": 0
+    }
+}
