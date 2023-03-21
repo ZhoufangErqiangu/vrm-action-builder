@@ -46,7 +46,7 @@ export class VrmBase {
     this.elementWidth = vrmBox.clientWidth;
     this.elementHeight = vrmBox.clientHeight;
     // renderer
-    this.renderer = new WebGLRenderer();
+    this.renderer = new WebGLRenderer({ antialias: true });
     this.renderer.outputEncoding = sRGBEncoding;
     this.renderer.setSize(this.elementWidth, this.elementHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);

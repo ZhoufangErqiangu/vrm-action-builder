@@ -11,14 +11,15 @@
 import { ElMessage, ElProgress } from "element-plus";
 import "element-plus/es/components/progress/style/css";
 import { onMounted, ref } from "vue";
-import { VrmBase, VrmEndlessAnimate } from "../../assets/vrm";
+import { VrmBase, VrmAnimate } from "../../assets/vrm";
+import { VRMHumanBoneName } from "@pixiv/three-vrm";
 
 const loading = ref(false);
 const progressValue = ref(0.0);
 let base: VrmBase;
-let animate1: VrmEndlessAnimate;
+let animate1: VrmAnimate;
 
-onMounted(async () => {
+async function init() {
   try {
     // use dom
     const vrmBox = document.getElementById("vrm-box");
@@ -30,16 +31,31 @@ onMounted(async () => {
       onProgress: (ev) => { progressValue.value = ev.loaded / ev.total * 100.0; }
     });
     loading.value = true;
-    animate1 = new VrmEndlessAnimate(base);
+    animate1 = new VrmAnimate(base, function (this: VrmAnimate) {
+      const s =
+        0.25 * Math.PI * Math.sin(Math.PI * this.base.clock.elapsedTime);
+      const neck = this.base.vrm.humanoid.getNormalizedBoneNode(
+        VRMHumanBoneName.Neck,
+      );
+      const leftUpperArm = this.base.vrm.humanoid.getNormalizedBoneNode(
+        VRMHumanBoneName.LeftUpperArm,
+      );
+      const rightUpperArm = this.base.vrm.humanoid.getNormalizedBoneNode(
+        VRMHumanBoneName.RightUpperArm,
+      );
+      if (neck) neck.rotation.y = s;
+      if (leftUpperArm) leftUpperArm.rotation.z = s;
+      if (rightUpperArm) rightUpperArm.rotation.x = s;
+      if (this.base.clock.elapsedTime > 4) this.stop();
+    });
     animate1.start();
-    setTimeout(() => {
-      animate1.stop();
-    }, 3000);
   } catch (err) {
     ElMessage.error("Vrm Load Error.");
     console.error("vrm load error", err);
   }
-});
+}
+
+onMounted(init);
 </script>
 
 <style lang="less" scoped>

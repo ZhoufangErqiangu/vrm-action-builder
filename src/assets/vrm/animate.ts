@@ -1,42 +1,32 @@
-import { VRMHumanBoneName } from "@pixiv/three-vrm";
 import { type VrmBase } from "./base";
 
-export class VrmEndlessAnimate {
+export type AnimateFunction = (this: VrmAnimate) => void;
+export class VrmAnimate {
   public base: VrmBase;
 
+  // flag
   public running = false;
 
-  constructor(base: VrmBase) {
+  // function
+  private readonly animate: AnimateFunction;
+
+  constructor(base: VrmBase, animate: AnimateFunction) {
     this.base = base;
+    this.animate = animate;
     this.start();
   }
 
   public start() {
-    if (!this.base.isReady) return;
-    if (this.running) return;
+    if (!this.base.isReady || this.running) return;
     this.running = true;
-    const animate = () => {
-      if (this.running) requestAnimationFrame(animate);
-      const deltaTime = this.base.clock.getDelta();
-      // tweak bones
-      const s =
-        0.25 * Math.PI * Math.sin(Math.PI * this.base.clock.elapsedTime);
-      const neck = this.base.vrm.humanoid.getNormalizedBoneNode(
-        VRMHumanBoneName.Neck,
-      );
-      const leftUpperArm = this.base.vrm.humanoid.getNormalizedBoneNode(
-        VRMHumanBoneName.LeftUpperArm,
-      );
-      const rightUpperArm = this.base.vrm.humanoid.getNormalizedBoneNode(
-        VRMHumanBoneName.RightUpperArm,
-      );
-      if (neck) neck.rotation.y = s;
-      if (leftUpperArm) leftUpperArm.rotation.z = s;
-      if (rightUpperArm) rightUpperArm.rotation.x = s;
+    const anm = () => {
+      if (this.running) requestAnimationFrame(anm);
+      // do animate
+      this.animate();
       // update vrm
-      this.base.vrm.update(deltaTime);
+      this.base.vrm.update(this.base.clock.getDelta());
     };
-    animate();
+    anm();
   }
 
   public stop() {
