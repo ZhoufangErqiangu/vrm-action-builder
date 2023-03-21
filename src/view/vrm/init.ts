@@ -1,8 +1,11 @@
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { type GLTFParser } from "three/examples/jsm/loaders/GLTFLoader";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {
+  GLTFLoader,
+  type GLTF,
+  type GLTFParser,
+} from "three/examples/jsm/loaders/GLTFLoader";
 
 export function init(vrmBox: HTMLElement) {
   const vrmBoxSize = { width: vrmBox.clientWidth, height: vrmBox.clientHeight };
@@ -48,7 +51,7 @@ export function init(vrmBox: HTMLElement) {
     // URL of the VRM you want to load
     "/model/alicia-solid.vrm",
     // called when the resource is loaded
-    (gltf: any) => {
+    (gltf: GLTF) => {
       const vrm = gltf.userData.vrm;
 
       // calling these functions greatly improves the performance
@@ -65,7 +68,7 @@ export function init(vrmBox: HTMLElement) {
       scene.add(vrm.scene);
     },
     // called while loading is progressing
-    (progress: any) => {
+    (progress: ProgressEvent) => {
       console.log(
         "Loading model...",
         100.0 * (progress.loaded / progress.total),
@@ -73,7 +76,7 @@ export function init(vrmBox: HTMLElement) {
       );
     },
     // called when loading has errors
-    (error: any) => {
+    (error: ErrorEvent) => {
       console.error(error);
     },
   );
