@@ -31,40 +31,31 @@ body {
 
 @font-face {
   font-family: "Source Han Sans CN";
-  src: local("Source Han Sans CN"),
-    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Normal.otf"),
-    url("/font/SourceHanSansCN-Normal.otf");
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-Normal.otf");
   font-weight: 400;
 }
 
 /* @font-face {
   font-family: "Source Han Sans CN";
   src: local("Source Han Sans CN"),
-    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Regular.otf"),
     url("/font/SourceHanSansCN-Regular.otf");
   font-weight: 400;
 } */
 
 @font-face {
   font-family: "Source Han Sans CN";
-  src: local("Source Han Sans CN"),
-    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Medium.otf"),
-    url("/font/SourceHanSansCN-Medium.otf");
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-Medium.otf");
   font-weight: 500;
 }
 
 @font-face {
   font-family: "Source Han Sans CN";
-  src: local("Source Han Sans CN"),
-    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Bold.otf"),
-    url("/font/SourceHanSansCN-Bold.otf");
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-Bold.otf");
   font-weight: 700;
 }
 
 @font-face {
   font-family: "Source Han Sans CN";
-  src: local("Source Han Sans CN"),
-    url("https://daodao-1256203747.cos.ap-shanghai.myqcloud.com/assets/SourceHanSansCN-Heavy.otf"),
-    url("/font/SourceHanSansCN-Heavy.otf");
+  src: local("Source Han Sans CN"), url("/font/SourceHanSansCN-Heavy.otf");
   font-weight: 900;
 }
