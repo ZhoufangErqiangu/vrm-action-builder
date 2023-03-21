@@ -11,7 +11,7 @@
 import { ElMessage, ElProgress } from "element-plus";
 import "element-plus/es/components/progress/style/css";
 import { onMounted, ref } from "vue";
-import { animate } from "./animate";
+import { Animate } from "./animate";
 import { init } from "./init";
 
 const ready = ref(false);
@@ -28,7 +28,8 @@ onMounted(async () => {
     });
     ready.value = true;
     // animate
-    animate(vrm, renderer, scene, camera, clock);
+    const animate = new Animate({ vrm, renderer, scene, camera, clock });
+    setTimeout(() => { animate.stop(); }, 3000);
   } catch (err) {
     ElMessage.error("Vrm Load Error.");
     console.error("vrm load error", err);
