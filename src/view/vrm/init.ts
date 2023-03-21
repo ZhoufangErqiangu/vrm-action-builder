@@ -9,7 +9,6 @@ import {
 
 export function init(vrmBox: HTMLElement) {
   const vrmBoxSize = { width: vrmBox.clientWidth, height: vrmBox.clientHeight };
-
   // render
   const renderer = new THREE.WebGLRenderer();
   renderer.outputEncoding = THREE.sRGBEncoding;
@@ -77,7 +76,7 @@ export function init(vrmBox: HTMLElement) {
     },
     // called when loading has errors
     (error: ErrorEvent) => {
-      console.error(error);
+      console.error("gltf loader error", error);
     },
   );
 
