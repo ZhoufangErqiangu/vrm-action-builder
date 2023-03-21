@@ -1,4 +1,4 @@
-import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
+import { VRMLoaderPlugin, VRMUtils, type VRM } from "@pixiv/three-vrm";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {
@@ -7,7 +7,27 @@ import {
   type GLTFParser,
 } from "three/examples/jsm/loaders/GLTFLoader";
 
-export function init(vrmBox: HTMLElement) {
+export interface InitParams {
+  onProgress?: (ev: ProgressEvent) => void;
+}
+export interface InitRes {
+  vrm: VRM;
+  renderer: THREE.WebGLRenderer;
+  camera: THREE.PerspectiveCamera;
+  scene: THREE.Scene;
+  light: THREE.DirectionalLight;
+  loader: GLTFLoader;
+  clock: THREE.Clock;
+}
+export async function init(
+  modelUrl: string,
+  vrmBox: HTMLElement,
+  {
+    onProgress = (ev: ProgressEvent) => {
+      console.log("Loading model...", 100.0 * (ev.loaded / ev.total), "%");
+    },
+  }: InitParams = {},
+) {
   const vrmBoxSize = { width: vrmBox.clientWidth, height: vrmBox.clientHeight };
   // render
   const renderer = new THREE.WebGLRenderer();
@@ -38,47 +58,11 @@ export function init(vrmBox: HTMLElement) {
   light.position.set(1.0, 1.0, 1.0).normalize();
   scene.add(light);
   // gltf and vrm
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  let currentVrm;
   const loader = new GLTFLoader();
   loader.crossOrigin = "anonymous";
   loader.register((parser: GLTFParser) => {
     return new VRMLoaderPlugin(parser);
   });
-  loader.load(
-    // URL of the VRM you want to load
-    "/model/alicia-solid.vrm",
-    // called when the resource is loaded
-    (gltf: GLTF) => {
-      const vrm = gltf.userData.vrm;
-
-      // calling these functions greatly improves the performance
-      VRMUtils.removeUnnecessaryVertices(gltf.scene);
-      VRMUtils.removeUnnecessaryJoints(gltf.scene);
-
-      // Disable frustum culling
-      vrm.scene.traverse((obj: any) => {
-        obj.frustumCulled = false;
-      });
-
-      currentVrm = vrm;
-      console.debug("vrm", vrm);
-      scene.add(vrm.scene);
-    },
-    // called while loading is progressing
-    (progress: ProgressEvent) => {
-      console.log(
-        "Loading model...",
-        100.0 * (progress.loaded / progress.total),
-        "%",
-      );
-    },
-    // called when loading has errors
-    (error: ErrorEvent) => {
-      console.error("gltf loader error", error);
-    },
-  );
 
   // helpers
   const gridHelper = new THREE.GridHelper(10, 10);
@@ -90,17 +74,32 @@ export function init(vrmBox: HTMLElement) {
   const clock = new THREE.Clock();
   clock.start();
 
-  const animate = () => {
-    requestAnimationFrame(animate);
-    // update vrm components
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if (currentVrm) {
-      currentVrm.update(clock.getDelta());
-    }
-    // render
-    renderer.render(scene, camera);
-  };
+  return await new Promise<InitRes>((resolve, reject) => {
+    loader.load(
+      // URL of the VRM you want to load
+      modelUrl,
+      // called when the resource is loaded
+      (gltf: GLTF) => {
+        const vrm: VRM = gltf.userData.vrm;
 
-  animate();
+        // calling these functions greatly improves the performance
+        VRMUtils.removeUnnecessaryVertices(gltf.scene);
+        VRMUtils.removeUnnecessaryJoints(gltf.scene);
+
+        // Disable frustum culling
+        vrm.scene.traverse((obj: any) => {
+          obj.frustumCulled = false;
+        });
+
+        scene.add(vrm.scene);
+        resolve({ vrm, renderer, camera, scene, light, loader, clock });
+      },
+      // called while loading is progressing
+      onProgress,
+      // called when loading has errors
+      (ev: ErrorEvent) => {
+        reject(ev);
+      },
+    );
+  });
 }

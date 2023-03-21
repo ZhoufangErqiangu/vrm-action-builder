@@ -5,10 +5,10 @@
     </div>
     <div class="text2">
       <a href="mailto:xxx@xxx.com">
-        Power by ZC Digitals
+        Power by Alex
       </a>
       <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">
-        备案号: 沪ICP备19008109号-1
+        备案号: 沪ICP备XXXXXXXX号-1
       </a>
     </div>
   </div>
