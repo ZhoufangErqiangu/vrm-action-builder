@@ -1,4 +1,9 @@
-import { VRMLoaderPlugin, VRMUtils, type VRM } from "@pixiv/three-vrm";
+import {
+  VRMLoaderPlugin,
+  VRMUtils,
+  type VRM,
+  type VRMHumanBoneName,
+} from "@pixiv/three-vrm";
 import {
   AxesHelper,
   Clock,
@@ -90,7 +95,7 @@ export class VrmBase {
     };
   }
 
-  async init({
+  public async init({
     modelUrl,
     onProgress = (ev: ProgressEvent) => {
       console.debug("Loading model...", 100.0 * (ev.loaded / ev.total), "%");
@@ -130,4 +135,38 @@ export class VrmBase {
   get isReady() {
     return this.ready && !!this.vrm;
   }
+
+  public moveSingleBone(
+    boneName: VRMHumanBoneName,
+    param: VrmBaseMoveSingleBoneParam,
+  ) {
+    const fn = () => {
+      if (!this.ready) return;
+      // use bone
+      const bone = this.vrm.humanoid.getNormalizedBoneNode(boneName);
+      if (!bone) throw new Error(`null bone ${boneName}`);
+      // change vrm
+      if (param.moveType === "absolute") {
+        bone.rotation.x = param.rotation.x;
+        bone.rotation.y = param.rotation.y;
+        bone.rotation.z = param.rotation.z;
+      } else if (param.moveType === "relative") {
+        bone.rotation.x += param.rotation.x;
+        bone.rotation.y += param.rotation.y;
+        bone.rotation.z += param.rotation.z;
+      }
+      // update vrm
+      this.vrm.update(this.clock.getDelta());
+    };
+    requestAnimationFrame(fn);
+  }
+}
+
+export interface VrmBaseMoveSingleBoneParam {
+  moveType: "absolute" | "relative";
+  rotation: {
+    x: number;
+    y: number;
+    z: number;
+  };
 }

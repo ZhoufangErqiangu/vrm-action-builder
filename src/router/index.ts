@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "index",
-    redirect: "/vrm",
+    redirect: "/vrm-action",
   },
   {
     path: "/",

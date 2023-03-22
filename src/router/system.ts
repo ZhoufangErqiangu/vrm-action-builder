@@ -1,6 +1,5 @@
 import { type RouteRecordRaw } from "vue-router";
 import LoginView from "../view/system/LoginView.vue";
-import VrmTest from "../view/vrm/VrmTest.vue";
 import { defineAsyncComponent } from "vue";
 
 const routes: RouteRecordRaw[] = [
@@ -27,7 +26,20 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/vrm",
     name: "vrm",
-    component: VrmTest,
+    component: defineAsyncComponent(
+      async () => await import("../view/vrm/VrmTest.vue"),
+    ),
+    meta: {
+      title: "Vrm Test",
+      desc: "",
+    },
+  },
+  {
+    path: "/vrm-action",
+    name: "vrm action",
+    component: defineAsyncComponent(
+      async () => await import("../view/vrm/VrmAction.vue"),
+    ),
     meta: {
       title: "Vrm Test",
       desc: "",

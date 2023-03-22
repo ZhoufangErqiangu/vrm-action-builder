@@ -33,4 +33,8 @@ import LayoutHeader from "./LayoutHeader.vue";
     height: 28px;
   }
 }
+
+.main-box {
+  position: relative;
+}
 </style>
