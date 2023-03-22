@@ -1,6 +1,7 @@
 <template>
   <div class="edit-box">
-    <vrm-bone v-for="item in list" :key="`vrmBone${item}`" class="bone" :vrm="props.vrm" @close="onClose(item)" />
+    <vrm-bone v-for="item, index in action" :key="`vrmBone${item.uuid}`" v-model:action="action[index]" class="bone"
+      @close="onClose(index)" />
     <div class="add" @click="onAdd">
       <el-icon size="30" color="white">
         <plus />
@@ -11,27 +12,42 @@
 
 <script lang="ts" setup>
 import { Plus } from "@element-plus/icons-vue";
-import { ref } from "vue";
-import { VrmBase } from "../../assets/vrm";
+import { VrmBase, VrmBaseMoveSingleBoneData } from "../../assets/vrm";
 import VrmBone from "./VrmBone.vue";
+import { uuid } from "../../util/uuid";
+import { onMounted, reactive, watch } from "vue";
 
+// eslint-disable-next-line no-unused-vars
 const props = defineProps<{ vrm: VrmBase }>();
-
-function cid() {
-  return Math.random().toFixed(6);
-}
-
-const list = ref([cid()]);
+const action: VrmBaseMoveSingleBoneData[] = reactive([]);
 
 function onAdd() {
-  list.value.push(cid());
+  action.push({
+    uuid: uuid(),
+    boneName: undefined,
+    param: {
+      moveType: "absolute",
+      rotation: { x: 0.0, y: 0.0, z: 0.0 }
+    }
+  });
 }
 
-function onClose(id: string) {
-  const index = list.value.indexOf(id);
-  if (index < 0) return;
-  list.value.splice(index, 1);
+function onClose(index: number) {
+  const temp = action[index];
+  if (temp.boneName) {
+    props.vrm.resetSingleBone(temp.boneName);
+  }
+  action.splice(index, 1);
 }
+
+onMounted(() => {
+  onAdd();
+});
+
+watch(action, (val) => {
+  if (!props.vrm?.isReady) return;
+  props.vrm.moveMultipleBone(val);
+});
 </script>
 
 <style lang="less" scoped>
@@ -39,7 +55,8 @@ function onClose(id: string) {
   position: absolute;
   right: 30px;
   top: 30px;
-  height: calc(100% - 40px);
+  height: calc(100% - 60px);
+  overflow-x: hidden;
   overflow-y: auto;
 
   .bone {

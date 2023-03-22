@@ -160,6 +160,20 @@ export class VrmBase {
     };
     requestAnimationFrame(fn);
   }
+
+  public resetSingleBone(boneName: VRMHumanBoneName) {
+    this.moveSingleBone(boneName, {
+      moveType: "absolute",
+      rotation: { x: 0.0, y: 0.0, z: 0.0 },
+    });
+  }
+
+  public moveMultipleBone(data: VrmBaseMoveSingleBoneData[]) {
+    data.forEach((e) => {
+      if (!e.boneName) return;
+      this.moveSingleBone(e.boneName, e.param);
+    });
+  }
 }
 
 export interface VrmBaseMoveSingleBoneParam {
@@ -169,4 +183,10 @@ export interface VrmBaseMoveSingleBoneParam {
     y: number;
     z: number;
   };
+}
+
+export interface VrmBaseMoveSingleBoneData {
+  uuid: string;
+  boneName?: VRMHumanBoneName;
+  param: VrmBaseMoveSingleBoneParam;
 }

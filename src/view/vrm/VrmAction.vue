@@ -5,7 +5,7 @@
       <el-progress :percentage="progressValue" />
     </div>
   </div>
-    <vrm-edit :vrm="base" />
+  <vrm-edit :vrm="base" />
 </template>
 
 <script lang="ts" setup>
@@ -17,6 +17,7 @@ import VrmEdit from "./VrmEdit.vue";
 
 const loading = ref(true);
 const progressValue = ref(0.0);
+
 let base: VrmBase;
 
 async function init() {
@@ -44,7 +45,7 @@ onMounted(init);
 .vrm-box {
   position: relative;
   margin: 0 auto;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 160px);
 
   .progress-box {
     width: 260px;
