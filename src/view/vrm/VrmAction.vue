@@ -44,7 +44,7 @@ onMounted(init);
 .vrm-box {
   position: relative;
   margin: 0 auto;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 120px);
 
   .progress-box {
     width: 260px;

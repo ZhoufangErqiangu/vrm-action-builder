@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
       async () => await import("../view/vrm/VrmAction.vue"),
     ),
     meta: {
-      title: "Vrm Test",
+      title: "Vrm Action",
       desc: "",
     },
   },
