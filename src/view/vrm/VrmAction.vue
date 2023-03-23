@@ -5,7 +5,8 @@
       <el-progress :percentage="progressValue" />
     </div>
   </div>
-  <vrm-edit :vrm="base" />
+  <vrm-edit :vrm="base" :index="1" />
+  <vrm-control :vrm="base" />
 </template>
 
 <script lang="ts" setup>
@@ -14,6 +15,7 @@ import "element-plus/es/components/progress/style/css";
 import { onMounted, ref } from "vue";
 import { VrmBase } from "../../assets/vrm";
 import VrmEdit from "./VrmEdit.vue";
+import VrmControl from "./VrmControl.vue";
 
 const loading = ref(true);
 const progressValue = ref(0.0);

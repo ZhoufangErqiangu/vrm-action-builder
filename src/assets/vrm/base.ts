@@ -3,6 +3,7 @@ import {
   VRMUtils,
   type VRM,
   type VRMHumanBoneName,
+  VRMHumanBoneList,
 } from "@pixiv/three-vrm";
 import {
   AxesHelper,
@@ -91,6 +92,7 @@ export class VrmBase {
     // animate
     this.animate = () => {
       requestAnimationFrame(this.animate);
+      this.vrm.update(this.clock.getDelta());
       this.renderer.render(this.scene, this.camera);
     };
   }
@@ -144,7 +146,10 @@ export class VrmBase {
       if (!this.ready) return;
       // use bone
       const bone = this.vrm.humanoid.getNormalizedBoneNode(boneName);
-      if (!bone) throw new Error(`null bone ${boneName}`);
+      if (!bone) {
+        console.warn("null bone", boneName);
+        return;
+      }
       // change vrm
       if (param.moveType === "absolute") {
         bone.rotation.x = param.rotation.x;
@@ -155,8 +160,6 @@ export class VrmBase {
         bone.rotation.y += param.rotation.y;
         bone.rotation.z += param.rotation.z;
       }
-      // update vrm
-      this.vrm.update(this.clock.getDelta());
     };
     requestAnimationFrame(fn);
   }
@@ -168,11 +171,65 @@ export class VrmBase {
     });
   }
 
+  public resetAllBone() {
+    VRMHumanBoneList.forEach((e) => {
+      this.resetSingleBone(e);
+    });
+  }
+
   public moveMultipleBone(data: VrmBaseMoveSingleBoneData[]) {
     data.forEach((e) => {
       if (!e.boneName) return;
       this.moveSingleBone(e.boneName, e.param);
     });
+  }
+
+  public getCurrentBonePos() {
+    const pos: VrmBaseBonePos = {};
+    for (const key of VRMHumanBoneList) {
+      const bone = this.vrm.humanoid.getNormalizedBoneNode(key);
+      if (bone) {
+        pos[key] = {
+          rotation: {
+            x: bone.rotation.x,
+            y: bone.rotation.y,
+            z: bone.rotation.z,
+          },
+        };
+      }
+    }
+    return pos;
+  }
+
+  public runAction(param: VrmBaseActionParam) {
+    const startTime = this.clock.getElapsedTime() * 1000.0;
+    const startPos = this.getCurrentBonePos();
+    const fn = () => {
+      const nowTime = this.clock.getElapsedTime() * 1000.0;
+      const dT = nowTime - startTime;
+      if (nowTime > startTime + param.time) return;
+      // loop action
+      const moveList: VrmBaseMoveSingleBoneData[] = [];
+      for (const action of param.action) {
+        if (!action.boneName) break;
+        const startP = startPos[action.boneName];
+        if (!startP) break;
+        const x =
+          ((action.param.rotation.x - startP.rotation.x) / param.time) * dT;
+        const y =
+          ((action.param.rotation.y - startP.rotation.y) / param.time) * dT;
+        const z =
+          ((action.param.rotation.z - startP.rotation.z) / param.time) * dT;
+        moveList.push({
+          uuid: "",
+          boneName: action.boneName,
+          param: { moveType: "absolute", rotation: { x, y, z } },
+        });
+      }
+      this.moveMultipleBone(moveList);
+      requestAnimationFrame(fn);
+    };
+    requestAnimationFrame(fn);
   }
 }
 
@@ -190,3 +247,24 @@ export interface VrmBaseMoveSingleBoneData {
   boneName?: VRMHumanBoneName;
   param: VrmBaseMoveSingleBoneParam;
 }
+
+/**
+ * time time in ms
+ */
+export interface VrmBaseActionParam {
+  uuid: string;
+  name: string;
+  time: number;
+  action: VrmBaseMoveSingleBoneData[];
+}
+
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+export type VrmBaseBonePos = {
+  [key in VRMHumanBoneName]?: {
+    rotation: {
+      x: number;
+      y: number;
+      z: number;
+    };
+  };
+};

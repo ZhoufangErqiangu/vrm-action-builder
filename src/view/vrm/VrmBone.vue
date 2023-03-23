@@ -18,7 +18,10 @@
         :min="Math.PI * -1.0" @input="onRotationChangeZ" />
     </el-form-item>
     <el-form-item>
-      <el-button type="warning" :icon="Close" @click="emits('close')">
+      <el-button type="warning" :icon="Refresh" @click="emits('reset')">
+        重置
+      </el-button>
+      <el-button type="danger" :icon="Close" @click="emits('close')">
         删除
       </el-button>
     </el-form-item>
@@ -26,7 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Close } from "@element-plus/icons-vue";
+import { Close, Refresh } from "@element-plus/icons-vue";
+import { VRMHumanBoneName } from "@pixiv/three-vrm-core";
 import { ElButton, ElForm, ElFormItem, ElOption, ElSelect, ElSlider } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/form-item/style/css";
@@ -34,12 +38,11 @@ import "element-plus/es/components/form/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/slider/style/css";
-import { VrmBaseMoveSingleBoneData, vrmHumanBoneNameOption } from "../../assets/vrm";
-import { VRMHumanBoneName } from "@pixiv/three-vrm-core";
 import { nextTick } from "vue";
+import { VrmBaseMoveSingleBoneData, vrmHumanBoneNameOption } from "../../assets/vrm";
 
 const props = withDefaults(defineProps<{ action: VrmBaseMoveSingleBoneData }>(), {});
-const emits = defineEmits(["close", "update:action"]);
+const emits = defineEmits(["close", "reset", "update:action"]);
 
 function onBoneReset() {
   if (props.action.boneName) {
