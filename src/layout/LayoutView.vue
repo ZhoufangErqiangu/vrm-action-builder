@@ -36,6 +36,6 @@ import LayoutHeader from "./LayoutHeader.vue";
 
 .main-box {
   position: relative;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 120px);
 }
 </style>
