@@ -7,6 +7,7 @@
   </div>
   <vrm-edit :vrm="base" :index="1" />
   <vrm-control :vrm="base" />
+  <vrm-action-list :vrm="base" />
 </template>
 
 <script lang="ts" setup>
@@ -16,6 +17,7 @@ import { onMounted, ref } from "vue";
 import { VrmBase } from "../../assets/vrm";
 import VrmEdit from "./VrmEdit.vue";
 import VrmControl from "./VrmControl.vue";
+import VrmActionList from "./VrmActionList.vue";
 
 const loading = ref(true);
 const progressValue = ref(0.0);

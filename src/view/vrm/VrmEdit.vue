@@ -38,14 +38,17 @@ import { computed, onMounted, reactive, watch } from "vue";
 import { VrmBase, VrmBaseMoveSingleBoneData } from "../../assets/vrm";
 import { uuid } from "../../util/uuid";
 import VrmBone from "./VrmBone.vue";
+import { useActionListStroe } from "../../store/actionList";
 
 const props = defineProps<{ vrm: VrmBase, index: Number }>();
+const actionListStore = useActionListStroe();
 const action: VrmBaseMoveSingleBoneData[] = reactive([]);
-const form = reactive({ name: `action ${props.index}`, time: 1000 });
+const form = reactive({ name: `action ${actionListStore.list.length + 1}`, time: 1000 });
+const uuidStr = uuid();
 
 const actionParam = computed(() => {
   return {
-    uuid: uuid(),
+    uuid: uuidStr,
     ...form,
     action,
   };
@@ -79,7 +82,7 @@ function onClose(index: number) {
 }
 
 function onComplete() {
-  console.log("complete", JSON.stringify(actionParam.value));
+  actionListStore.addAction(actionParam.value);
 }
 
 function onRun() {
@@ -114,6 +117,7 @@ watch(action, (val) => {
     min-width: 100px;
     padding: 15px 0;
     box-sizing: border-box;
+    background-color: #383838;
     border: solid 1px grey;
     border-radius: 5px;
     text-align: center;
